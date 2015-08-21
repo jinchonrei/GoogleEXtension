@@ -1,0 +1,20 @@
+
+<html>
+  <head>
+    <title>Getting Started Extension's Popup</title>
+  </head>
+  <body>
+    <div id="status">abandon</div>
+    <div>ability</div>
+    <div>able</div>
+    <div>aboard</div>
+    <div>abounding</div>
+    <div>about</div>
+    <div>above</div>
+    <div>abroad</div>
+    <div>absent</div>
+    <div>absorb</div>
+    <div>accent</div>
+    <div>accept</div>
+  </body>
+</html>
