@@ -1,0 +1,12 @@
+{
+	 // Required
+  "manifest_version": 2,
+  "name": "Study Englist",
+  "version": "1.0.0.0",
+  
+  "browser_action": {
+     "default_icon":  "icon.png",
+     "default_popup": "popup.html"
+      },
+    "content_scripts": [{"matches": ["https://spreadsheets.google.com/*"],"js": ["jquery-2.1.4.min.js"]}]
+ }
