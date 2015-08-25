@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SMTPDefinitionClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <MailServer>172.20.1.167</MailServer>
+  <MailServerPort>25</MailServerPort>
+  <EnableSsl>false</EnableSsl>
+  <IsBodyHtml>true</IsBodyHtml>
+  <BodyEncoding>utf-8</BodyEncoding>
+  <SubjectEncoding>utf-8</SubjectEncoding>
+  <MailFromEMail>kwcloudtest@omi.esunsec.com.tw</MailFromEMail>
+  <SMTPUsername />
+  <SMTPPassword />
+  <NameOfMailSender>玉山證券</NameOfMailSender>
+</SMTPDefinitionClass>
