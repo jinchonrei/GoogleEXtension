@@ -263,10 +263,10 @@
                 $("#sltMarket").change();
                 $("#sltAccount option[value='" + account + "']").attr("selected", true);
             } else if (id == "sltUserFOSumGroup") {
-				//if(_MARKET == "F")
+				if(_MARKET == "F")
 					$("#sltMarket option[value='F']").attr("selected", true);
-				//else if(_MARKET == "O")
-					//$("#sltMarket option[value='O']").attr("selected", true);
+				else if(_MARKET == "O")
+					$("#sltMarket option[value='O']").attr("selected", true);
                 $("#sltMarket").change();
                 $("#sltAccount option[value='" + account + "']").attr("selected", true);
             }
@@ -507,12 +507,10 @@
                 default:
                     return;
             }
-           
+            $("#sltMarket").change();
             var $sltUserSumAccount= $("#divUserSymbols [name='sltUserSumAccount']:visible");
             if ($sltUserSumAccount.length > 0) {
                 SetOrderBoxAccount($sltUserSumAccount);
-                console.log("a");
-                 $("#sltMarket").change();
             }
             if (canOrder) {               
                 $("#txtOrderSymbolID").val($("#txtConditionSymbolID").val());
@@ -2329,9 +2327,7 @@
                 });
             }
             if ($nodeArray.length > 0)
-            { 
-            console.log("a");
-            BuildNodeListItem($MenuXml, $nodeArray); }
+            { BuildNodeListItem($MenuXml, $nodeArray); }
         }
         function formatInt(number,len) {
             var mask = "";
