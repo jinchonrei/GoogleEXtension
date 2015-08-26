@@ -259,16 +259,14 @@
             var id = $slt.attr("id");
             var account =  $slt.find("option:selected").html();
             if (id == "sltUserStockSumGroup") {
-			console.log("261");
                 $("#sltMarket option[value='S']").attr("selected", true);
                 $("#sltMarket").change();
                 $("#sltAccount option[value='" + account + "']").attr("selected", true);
             } else if (id == "sltUserFOSumGroup") {
-			console.log("266");
-					if(_MARKET == "F")
-						$("#sltMarket option[value='F']").attr("selected", true);
-					else
-						$("#sltMarket option[value='O']").attr("selected", true);
+				if(_MARKET == "F")
+					$("#sltMarket option[value='F']").attr("selected", true);
+				else
+					$("#sltMarket option[value='O']").attr("selected", true);
                 $("#sltMarket").change();
                 $("#sltAccount option[value='" + account + "']").attr("selected", true);
             }
@@ -421,12 +419,10 @@
         }
         var QuotationSymbolID = "";
         function SetSymbolToConditionSymbol($node) {
-            
             Clear(true);
             $("#txtConditionSymbolID").val($node.attr("code").toUpperCase());
             $("#txtConditionSymbolName").val($node.attr("name"));
             var market = GetSymbolMarket($node);
-			console.log(market);
             if (market == "") {
                 alert("無市場別");
                 return;
@@ -486,17 +482,13 @@
                     } else { return; }
                     break;
                 case "F":
-				console.log("488");
                     var $mkt = $("#sltMarket option[value='F']");
-					console.log($mkt);
                     if($mkt.length > 0){
                         $mkt.attr("selected", true);
                     } else { return; }
                     break;
                 case "O":
-				console.log("495");
                     var $mkt = $("#sltMarket option[value='O']");
-					console.log($mkt);
                     if($mkt.length > 0){
                         $mkt.attr("selected", true);
                     } else { return; }
