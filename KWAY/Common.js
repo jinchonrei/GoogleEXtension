@@ -118,10 +118,14 @@ function FormatHHMM(hhmm) {
 }
 
 function FormatHHMMSS(hhmmss) {
-    var hh = hhmmss / 10000;
-    var mm = (hhmmss / 100) % 100;
-    var ss = hhmmss % 100;
-    return parseInt(hh) + ":" + parseInt(mm) + ":" + parseInt(ss);
+	var hhmmsst = hhmmss;
+	if(hhmmss > 235959)
+		hhmmsst = hhmmss / 1000;
+    var hh = hhmmsst / 10000;
+    var mm = (hhmmsst / 100) % 100;
+    var ss = hhmmsst % 100;
+	var tmp = '%02d:%02d:%02d'.sprintf(parseInt(hh), parseInt(mm), parseInt(ss));
+    return tmp;
 }
 
 function GetOrderMarketTitle(market) {
