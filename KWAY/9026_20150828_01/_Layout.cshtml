@@ -1,0 +1,516 @@
+﻿@using System.Web;
+@using EagleEyes.Common
+@using EagleEyes.Properties
+@{
+    /* --- 系統維運中 --- */
+    if (Settings.Default.IsMaintenance >= 1)
+    { this.Response.Redirect("~/Monitor/Maintenance"); }
+    string SignValue = string.Empty;
+    if (HttpContext.Current.Session[CookieKeys.Sign] == null) { }
+    else { SignValue = (string)HttpContext.Current.Session[CookieKeys.Sign]; }
+    string userID = string.Empty;
+    bool isLogin = Util.IsLogin(ref userID);
+    if (isLogin) { }
+    else
+    {
+        //暫時關閉
+        if (Request.Url.PathAndQuery.StartsWith(EagleEyes.Common.Util.LoginUrl)) { }
+        else { this.Response.Redirect(EagleEyes.Common.Util.LoginUrl, true); }
+    }
+    //瀏覽器判別
+    string BrowserName = this.Request.Browser.Browser;
+    int BrowserVersion = this.Request.Browser.MajorVersion;
+    if ((BrowserName == "InternetExplorer") | (BrowserName == "IE"))
+    {
+        //if (BrowserVersion < 8)
+        //{ this.Response.Redirect("~/NotSupport.html"); }
+    }
+    Util.WriteLog("Browser name / version", BrowserName + " / " + BrowserVersion.ToString());
+
+    string caVersion = Util.GetCookieValue("CAVersion");
+    string IsMacSafari = "false";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>玉山雲端秘書</title>
+    <link runat="server" rel="shortcut icon" href="/ESUN.ico" type="image/x-icon" />
+    <link runat="server" rel="icon" href="/ESUN.ico" type="image/ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Expires" content="-1" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="Pragma-directive" content="no-cache" />
+    <meta http-equiv="Cache-Directive" content="no-cache" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+    <!--******** CSS Style 區段 ********-->
+    @RenderSection("Style", false)
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/style.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/keyvisual.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/glowtabs.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/dropdown.css")" rel="stylesheet" media="all" type="text/css" />
+    <link href="@Url.Content("~/css/personal.css")" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        body {
+	        margin-left: 0px;
+	        margin-top: 0px;
+	        margin-right: 0px;
+	        line-height:1;
+	        padding:0;
+	        font-size: 12px;
+	        background-color: #FFFFFF;
+        }
+        a {
+	        font-weight: normal;
+	        font-size: 12px;
+	        color: #666666;
+	        text-decoration: none;
+	        line-height: 18px;
+        }
+        a:link {
+	        color: #666666;
+        }
+        a:visited {
+	        color: #666666;
+        }
+        a:active, a:hover {
+	        color: #FF6699;
+        }
+        /* 表尾文字 */
+        .w1 {font-family: "新細明體";
+	        font-size: 12px;
+	        color: #666666;
+	        text-decoration: none;
+        }
+        a.gray:link {
+	        color: #646464;
+	        text-decoration: none;
+        }
+        a.gray:visited {
+	        color: #646464;
+	        text-decoration: none;
+        }
+        a.gray:hover {
+	        color: #05beb5;
+	        text-decoration: none;
+        }
+        a.mailstyle:link {
+	        color: #00aa88;
+            font-weight:bold;
+	        text-decoration: underline;
+        }
+        a.mailstyle:visited {
+	        color: #00aa88;
+            font-weight:bold;
+	        text-decoration: underline;
+        }
+        a.mailstyle:hover {
+	        color: #ff8800;
+            font-weight:bold;
+	        text-decoration: none;
+        }
+        .note2 {
+	        font-size: 13px;
+	        color: #666666;
+        }
+        .note {font-size: 18px;
+	        font-weight: bold;
+	        color: #666;
+        }
+        .w11 {
+	        font-family: "新細明體";
+	        font-size: 12px;
+	        color: #666666;
+	        text-decoration: none;
+	        font-weight: normal;
+        }
+        .w111 {
+	        font-family: "新細明體";
+	        font-size: 12px;
+	        color: #666666;
+	        text-decoration: none;
+	        font-weight: normal;
+        }
+        #divBody
+        {
+            width: 1024px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: -36px;
+            overflow: visible;
+        }
+        #divContent
+        {
+            margin-top: 20px;
+        }
+        #divFooterSpacer
+        {
+            height: 36px;
+        }
+        #divFooter
+        {
+            border-top: 1px solid #000;
+            height: 35px;
+        }
+        .GroupShowButton
+        {
+            background: gray;
+        }
+        .GroupHideButton
+        {
+            background: lightgray;
+        }
+        .line {background-image: url(@Url.Content("~/images/management_line.jpg"));height:22px}
+        .txt_ff{font-size:13px; line-height:20px;color:#fff;}
+        .txt_c{font-size:12px; line-height:18px;color:#666;}
+        .txt_b{font-size:12px; color:#557fb3; padding:6px 0;}
+        .bg   {background-image:url(@Url.Content("~/images/service_bg_1.jpg"));height: 140px;}
+        .line1
+        {
+            background-image: url(@Url.Content("~/images/personal_line_c.jpg"));
+        }
+        .line2
+        {
+            background-image: url(@Url.Content("~/images/personal_line_c01.jpg"));
+        }
+        .txt_e
+        {
+            font-size: 12px;
+            line-height: 18px;
+            color: #F00;
+        }
+        .txt_f
+        {
+            font-size: 12px;
+            line-height: 18px;
+            color: #090;
+        }
+        body
+        {
+            background: url(@Url.Content("~/images/bg_index_fullscreen_2.jpg")) left top no-repeat;
+        }
+        html,
+        body {
+           margin:0;
+           padding:0;
+           height:100%;
+        }
+        #container {
+           min-height:100%; 
+        }
+        #content { 
+           padding-bottom:135px;   /* Height of the footer */
+        }
+        #footer { 
+           width:100%; 
+           position:relative;
+           margin-top:-135px; 
+        }
+        .HideActiveX {
+          position: absolute;
+          left: -10000px;
+          width:0px;
+          height:0px;
+        }
+    </style>
+    <!--******** JavaScript 區段 ********-->
+    <script src="@Url.Content("~/Scripts/StringBuilder.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-1.8.0.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.8.11.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Plugin_ScreenCover.js")" type="text/javascript" ></script>
+    <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
+	<script src="@Url.Content("~/Scripts/String.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Common.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/DateFormat.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/json2.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/CA.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/BrowserDetection.js")" type="text/javascript"></script>
+    <script type="text/javascript">
+        //alert('BrowserName = ' + @BrowserName);
+        //alert('Version = ' + @BrowserVersion);
+        //逾時研判作業--------------------------
+        var timeoutopen = false;
+        //彈出視窗用的最大秒數
+        var openwindowmaxminute = @(EagleEyes.Properties.Settings.Default.AutoLogoutMinutes);
+        var openwindowmaxsecond = openwindowmaxminute * 60;
+        var openwindowcountsecond = 0;
+        var FirstUserID = "@userID";
+        //計算登出秒數用
+        var maxsecond = 30;
+        var countsecond = 0;
+        $(document).on('click', function() {        
+            openwindowcountsecond = 0;
+            countsecond = 0;
+            closeTimeOutWindows();
+        });
+        function openTimeOutWindows() {
+            if (timeoutopen) { }
+            else {
+                timeoutopen = true;
+                var msg = "您已閒置超過" + openwindowmaxminute + "分鐘，本系統將於 " + maxsecond + " 秒後自動登出，若需繼續使用請點擊空白處回原網頁。";
+                $("#TimeOutMsg").html(msg);
+                $("#TimeOutBox").draggable({ handle: $("#TimeOutBoxTitle") });
+                $("#TimeOutBox").css("z-Index", "1000");
+                $("#TimeOutBox").show();
+                var top = $(window).height() / 2 - $("#TimeOutBox").height() / 2;
+                var left = $(window).width() / 2 - $("#TimeOutBox").width() / 2;
+                $("#TimeOutBox").css("left", left);
+                $("#TimeOutBox").css("top", top);
+                $("#timeoutCover").ShowScreenCover("clip");
+            }
+        }
+        function closeTimeOutWindows() {
+            if (timeoutopen) {
+                timeoutopen = false;
+                countsecond = 0;
+                openwindowcountsecond = 0;
+                $("#timeoutCover").HideScreenCover("clip");
+                $("#TimeOutBox").hide();
+                /* --- 重新加入登入狀態 --- */
+                var DestURL = '@Url.Content("~/Login/RewriteSign")';
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: DestURL,
+                    data: "userID=" + FirstUserID,
+                    success: function (jData) { },
+                    error: function (obj) { }
+                });
+            }
+        }
+        function doReadSeconds() {
+            if (timeoutopen) {
+                var sec = (maxsecond - countsecond);
+                var msg = "您已閒置超過" + openwindowmaxminute + "分鐘，本系統將於 " + sec + " 秒後自動登出，若需繼續使用請點擊空白處回原網頁。";
+                $("#TimeOutMsg").html(msg);
+                countsecond++;
+                //開始登出
+                if (sec <= 0) {
+                    countsecond = 0;
+                    window.location.href = "@Url.Content("~/Login/DoLogout")";
+                }
+            } else {
+                if (openwindowcountsecond >= openwindowmaxsecond) {
+                    openwindowcountsecond = 0;
+                    openTimeOutWindows();
+                    if ($("#TimeOutBox").is(":visible")) { }
+                    else { openTimeOutWindows(); }
+                }
+                openwindowcountsecond++;
+            }
+        }
+        setInterval(doReadSeconds, 1000);
+        //逾時研判作業--------------------------
+        function confirmLogout() {
+            return confirm("確定要登出?");
+        }
+        $(function () {
+            IsMacSafari = @IsMacSafari;
+            $.datepicker.regional['zh-TW'] = {
+                closeText: '關閉',
+                prevText: '&#x3c;上月',
+                nextText: '下月&#x3e;',
+                currentText: '今天',
+                monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+		    '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                monthNamesShort: ['一', '二', '三', '四', '五', '六',
+		    '七', '八', '九', '十', '十一', '十二'],
+                dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+                dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+                dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+                weekHeader: '周',
+                dateFormat: 'yy/mm/dd',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: true,
+                yearSuffix: '年'
+            };
+            $.datepicker.setDefaults($.datepicker.regional['zh-TW']);
+            $("#divMenu div[name='divMenuItem_@(ViewContext.Controller.ValueProvider.GetValue("action").RawValue)']").attr("class", "divMenuItemSelected");
+        });
+        function MM_preloadImages() { //v3.0
+            var d = document; if (d.images) {
+                if (!d.MM_p) d.MM_p = new Array();
+                var i, j = d.MM_p.length, a = MM_preloadImages.arguments; for (i = 0; i < a.length; i++)
+                    if (a[i].indexOf("#") != 0) { d.MM_p[j] = new Image; d.MM_p[j++].src = a[i]; } 
+            }
+        }        
+    </script>
+    @RenderSection("Script", false)
+</head>
+<body onload="MM_preloadImages('@Url.Content("~/images/searchbar_btn_accordion_mouseover.png")','@Url.Content("~/images/searchbar_btn_search_mouseover.png")')">
+    <div id="container">
+        <table style="width:100%" border="0">
+            <tr>
+                <td class="header2" style="background: none; height:62px; text-align:left">
+                    <table border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td height="52" width="360" align="left" valign="bottom">
+                                <a href="#">
+                                    <img src="@Url.Content("~/images/logo2.png")" />
+                                </a>
+                            </td>
+                            <td style="text-align:right">
+                                <table border="0" cellpadding="0" cellspacing="0" style="text-align:left">
+                                    <tr>
+                                        <td height="13" align="right" valign="middle">&nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="middle">
+                                            <div id="menu2">
+                                                <ul>
+                                                    <li><a href="@Url.Content("~/Monitor/NotifySetting")" class="hide nav_02">通知設定</a>
+                                                    </li>
+                                                    <li><a href="#" class="hide nav_03">監控設定</a>
+                                                        <ul>
+                                                            <li><a href="@Url.Content("~/Monitor/MonitorSetting?p=1")">價量設定</a></li>
+                                                            <li><a href="@Url.Content("~/Monitor/MonitorSetting?p=2")">限時設定</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li><a href="#" class="hide nav_04">監控查詢</a>
+                                                        <ul>
+                                                            <li><a href="@Url.Content("~/Monitor/MonitorQuery?p=1")">監控中條件</a></li>
+                                                            <li><a href="@Url.Content("~/Monitor/MonitorQuery?p=2")">歷史監控</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li><a href="@Url.Content("~/Document/OperationDocument")" class="hide nav_05">操作說明</a>
+                                                    </li>
+                                                    <li><a href="@Url.Content("~/Login/DoLogout")" id="LogoutBtn" class="hide nav_06" onclick="return confirmLogout();">登出</a> </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <div id="content">
+            <div id="divBody" style="clear: both">
+                <div id="divContent">
+                @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer" style="z-index:1">
+        <table border="0" cellpadding="0" cellspacing="0" style="width:900px; text-align:center">
+          <tr>
+              <td bgcolor="#FFFFFF"><br />
+                    <table border="0" style="width:900px; text-align:center">
+                        <tr>
+                            <td colspan="2" align="center" class="w111">
+                                <img src="../../Images/line1.jpg" width="839" height="13" alt="" />
+                            </td>
+                        </tr>
+                    </table>
+                    <table border="0" cellpadding="0" cellspacing="0" style="width:780px; text-align:center">
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table style="width:100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td style="width:25px">&nbsp;</td>
+                                        <td class="w1">
+                                            <a href="http://www.esunbank.com.tw/privacy.htm" target="_blank" class="gray">隱私權聲明</a>│<a href="http://www.esunsec.com.tw/safe_announcement.asp" target="_blank" class="gray">安全宣告</a>│<a href="http://www.esunbank.com.tw/" target="_blank" class="gray">玉山銀行</a>．<a href="http://www.esunsec.com.tw/" target="_blank" class="gray">玉山證券</a>．<a href="http://www.esunins.com.tw/" target="_blank" class="gray">玉山保經</a>．<a href="http://www.esunbank.com.tw/about/esunventure.info" target="_blank" class="gray">玉山創投</a>｜<a href="http://www.esunfhc.com.tw/volunteer/" target="_blank" class="gray">玉山志工</a>｜<a href="http://www.104.com.tw/jobbank/custjob/index.php?r=cust&amp;j=444a42253836402330683b1d1d1d1d5f2443a363189j52&amp;jobsource=checkc" target="_blank" class="gray">線上菁英甄選</a><br />
+                                            <a href="http://www.esunsec.com.tw/cus_service/Service.asp" target="_blank" class="gray">服務據點</a> | 玉山證券服務專線 (02)5580-5013                     ｜語音下單專線：412-1113｜  Copyright c2011 E.SUN Securities Co., Ltd All Rights Reserved. 
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table border="0" cellspacing="0" cellpadding="0" style="width:98%">
+                                    <tr>
+                                        <td style="width:25px">&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+          </table>
+    </div>
+    <div id="divTaskingB" style="margin: 0px; background: #000; z-index: 999; display: none; overflow:hidden; filter: alpha(opacity = 1); opacity: 0.01">
+    </div>
+    <div id="divCover" style="margin: 0px; background: #000; z-index: 999; display: none; overflow:hidden; filter: alpha(opacity = 60); opacity: 0.6;">
+    </div>
+    <div id="divTasking" style="margin: 0px; background: #000; z-index: 999; display: none; overflow:hidden; filter: alpha(opacity = 5); opacity: 0.05;">
+    </div>
+    <div id="timeoutCover" style="margin: 0px; background: #000; z-index: 999; display: none; overflow:hidden; filter: alpha(opacity = 10); opacity: 0.1;">
+    </div>
+    <div id="divTest">
+    </div>
+    <!--- 作業中提示視窗 --->
+    <div id="LodingBox" 
+            style="clear: both; 
+                display: none;
+                position: absolute; 
+                border:1px solid gray; 
+                background-color:White; 
+                width:360px">
+        <div id="LodingBoxTitle"">
+            <table style="width:100%">
+                <tr>
+                    <td style="padding-left:4px; 
+                        padding-top:4px; 
+                        height:16px; 
+                        color:White; 
+                        background: #009893;
+                        text-align:left">
+                        玉山雲端 作業提示：
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height:32px; padding-left:16px; background-image:url('/Images/LoadingBG.png')">
+                        <span id="LodingMsg" style="color:Red">載入資訊中、請稍候...</span> 
+                    </td>
+                </tr>
+            </table>   
+        </div>
+    </div>
+    <!--- TIME OUT 視窗 --->
+    <div id="TimeOutBox" 
+            style="clear: both; 
+                display: none; 
+                position: absolute; 
+                border:1px solid gray; 
+                background-color:White; 
+                width:500px">
+        <div id="TimeOutBoxTitle"">
+            <table style="width:100%">
+                <tr>
+                    <td style="padding-left:4px; 
+                        padding-top:4px; 
+                        height:16px; 
+                        color:White; 
+                        background: #D90C75;
+                        text-align:left">
+                        玉山雲端 貼心提醒：
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height:24px; padding-left:4px">
+                        <span id="TimeOutMsg" style="color:Red">您的連線即將逾時...</span> 
+                    </td>
+                </tr>
+            </table>   
+        </div>
+    </div>
+    <applet id="esunca" name="esunca" code="com.twca.ESSecuritiesApplet.class" archive="/CA/ESSecuritiesApplet.jar" width="0" height="0">
+    </applet>
+</body>
+</html>
