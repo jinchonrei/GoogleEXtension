@@ -1,0 +1,994 @@
+@using EagleEyes.Common
+@{ Util.IsMobile(this.Request, this.Response); }
+@model EagleEyes.Controllers.LoginInfoObj
+@{     
+    ViewBag.Title = "玉山雲端秘書";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    string userID = string.Empty, msg = string.Empty;
+    string passWord = string.Empty;
+    string usrtAccount = string.Empty;
+    string activeIB = string.Empty;
+    if (this.Model == null) {}
+    else
+    {
+        userID = this.Model.UserID;
+        msg = this.Model.Msg;
+    }
+    Util.RemoveCookie(CookieKeys.Sign);
+    Util.RemoveCookie(CookieKeys.BHID);
+    Util.RemoveCookie(CookieKeys.ACID);
+    string IsMacSafari = "false";
+    string HostInfo = "LOCAL_ADDR = " + Request.ServerVariables["LOCAL_ADDR"] + ":";
+    HostInfo += Request.ServerVariables["SERVER_PORT"];
+    string BHNO = this.Request["BHNO"];
+    string ACNO = this.Request["ACNO"];
+    string APWD = this.Request["APWD"];
+    //Util.WriteLog("BHNO / ACNO / APWD", BHNO + " / " + ACNO + " / " + APWD);
+    //userID = "A225182060";
+    //userID = "C220838372";
+    //passWord = "cc616826";
+    //passWord = "k123456";
+    //usrtAccount = "0461542";
+    //activeIB = "8840";
+}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <!-- 登入頁不載入憑證,避免載入頁面時過慢
+    @{
+        /*
+        IsMacSafari = "true";
+        HtmlString caTag = new HtmlString("<applet id=\"esunca\" name=\"esunca\" code=\"com.twca.ESSecuritiesApplet.class\" archive=\"" + Url.Content("~/CA/ESSecuritiesApplet.jar") + "\" width=\"0\" height=\"0\"></applet>");
+        */
+    }
+    -->
+    <title>雲端秘書</title>
+    <link runat="server" rel="shortcut icon" href="/ESUN.ico" type="image/x-icon" />
+    <link runat="server" rel="icon" href="/ESUN.ico" type="image/ico" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+    <link href="@Url.Content("~/css/style.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/webcss.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/keyvisual.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/glowtabs.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/personal.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" media="all" type="text/css" href="@Url.Content("~/css/dropdown.css")" />
+    <script src="@Url.Content("~/Scripts/CA.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/String.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Common.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/StringBuilder.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-1.8.0.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.8.11.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Plugin_ScreenCover.js")" type="text/javascript" ></script>
+    <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/String.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Common.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/json2.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/CA.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/BrowserDetection.js")" type="text/javascript"></script>
+    <script type="text/javascript">
+        function MM_preloadImages() { //v3.0
+            var d = document; if (d.images) {
+                if (!d.MM_p) d.MM_p = new Array();
+                var i, j = d.MM_p.length, a = MM_preloadImages.arguments; for (i = 0; i < a.length; i++)
+                    if (a[i].indexOf("#") != 0) { d.MM_p[j] = new Image; d.MM_p[j++].src = a[i]; }
+            }
+        }
+    </script>
+    <style type="text/css">
+        .line {background-image: url(@Url.Content("~/images/management_line.jpg"));height:22px}
+        .txt_ff{font-size:13px; line-height:20px;color:#fff;}
+        .txt_c{font-size:12px; line-height:18px;color:#666;}
+        .txt_b{font-size:12px; color:#557fb3; padding:6px 0;}
+        .bg   {background-image:url(@Url.Content("~/images/service_bg_1.jpg"));height: 140px;}
+        .line1
+        {
+            background-image: url(@Url.Content("~/images/personal_line_c.jpg"));
+        }
+        .line2
+        {
+            background-image: url(@Url.Content("~/images/personal_line_c01.jpg"));
+        }
+        .txt_e
+        {
+            font-size: 12px;
+            line-height: 18px;
+            color: #F00;
+        }
+        .txt_f
+        {
+            font-size: 12px;
+            line-height: 18px;
+            color: #090;
+        }
+        body
+        {
+            background: url(@Url.Content("~/images/bg_index_fullscreen_2.jpg")) left top no-repeat;
+        }
+        html,
+        body {
+           margin:0;
+           padding:0;
+           height:100%;
+        }
+        #container {
+           min-height:100%; 
+        }
+        #content { 
+           padding-bottom:135px;   /* Height of the footer */
+        }
+        #footer { 
+           width:100%; 
+           position:relative;
+           margin-top:-135px; 
+        }
+        .HideActiveX {
+          position: absolute;
+          left: -10000px;
+          width:0px;
+          height:0px;
+        }
+    </style>
+    <style type="text/css">
+        body {
+	        margin-left: 0px;
+	        margin-top: 0px;
+	        margin-right: 0px;
+	        line-height:1;
+	        padding:0;
+	        font-size: 12px;
+	        background-color: #FFFFFF;
+        }
+        a {
+	        font-weight: normal;
+	        font-size: 12px;
+	        color: #666666;
+	        text-decoration: none;
+	        line-height: 18px;
+        }
+        a:link {
+	        color: #666666;
+        }
+        a:visited {
+	        color: #666666;
+        }
+        a:active, a:hover {
+	        color: #FF6699;
+        }
+        /* 表尾文字 */
+        .w1 {font-family: "新細明體";
+	        font-size: 12px;
+	        color: #666666;
+	        text-decoration: none;
+        }
+        a.gray:link {
+	        color: #646464;
+	        text-decoration: none;
+        }
+        a.gray:visited {
+	        color: #646464;
+	        text-decoration: none;
+        }
+        a.gray:hover {
+	        color: #05beb5;
+	        text-decoration: none;
+        }
+        .note2 {
+	        font-size: 13px;
+	        color: #666666;
+        }
+        .note {font-size: 18px;
+	        font-weight: bold;
+	        color: #666;
+        }
+        .w11 {
+	        font-family: "新細明體";
+	        font-size: 12px;
+	        color: #666666;
+	        text-decoration: none;
+	        font-weight: normal;
+        }
+        .w111 {
+	        font-family: "新細明體";
+	        font-size: 12px;
+	        color: #666666;
+	        text-decoration: none;
+	        font-weight: normal;
+        }
+        #divBody
+        {
+            width: 1024px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: -36px;
+            overflow: visible;
+        }
+        #divContent
+        {
+            margin-top: 20px;
+        }
+        #divFooterSpacer
+        {
+            height: 44px;
+        }
+        #divFooter
+        {
+            border-top: 1px solid #000;
+            height: 35px;
+        } 
+        .GroupShowButton
+        {
+            background: gray;
+        }
+        .GroupHideButton
+        {
+            background: lightgray;
+        }
+    </style>
+    <script type="text/javascript">
+        function doClearStatusLabel(AssignedLableName) {
+            var oTip = document.getElementById(AssignedLableName);
+            oTip.innerText = "";
+        }
+        ///偵測大寫模式
+        function detectCapsLock(LabelName) {
+            var e = event || window.event;
+            var o = e.target || e.srcElement;
+            var oTip = document.getElementById(LabelName);
+            var keyCode = e.keyCode || e.which;
+            var isShift = e.shiftKey || (keyCode == 16) || false;
+            if (((keyCode >= 65 && keyCode <= 90) && !isShift) || ((keyCode >= 97 && keyCode <= 122) && isShift)) {
+                oTip.innerHTML = "<font color=\"#ED145B\">請注意英文字母大小寫</font>";
+            }
+            else {
+                if (!(keyCode >= 33 && keyCode <= 64))
+                    oTip.innerHTML = "";
+            }
+        }
+        function ValueDump(FromControl, ToControl) {
+            var ToControl = document.getElementById(ToControl);
+            ToControl.value = FromControl.value;
+        }
+        function changePasswordState(Img, passwordText, passwordTextOther, state) {
+            var accountPassword = document.getElementById(passwordText);
+            var accountPasswordOther = document.getElementById(passwordTextOther);
+            if (state) {
+                $(passwordText).show();
+                $(passwordTextOther).hide();
+                $(Img).attr("src", "/Images/Eyes.gif");
+            } else {
+                $(passwordText).hide();
+                $(passwordTextOther).show();
+                $(Img).attr("src", "/Images/EyesBlue.gif");
+            }
+        }
+        function LoadBranchDat() {
+            $.ajax({
+                type: "POST",
+                data: {},
+                dataType: "json",
+                url: '@Url.Content("~/Data/LoadBranchDat")',
+                success: function (oData) {                    
+                    $('#accountIBb').empty();
+                    $('#accountIBb').append($('<option value="" selected />', { value: "", text: "請按查詢" }));
+                    var jsonData = $.parseJSON(oData.Content);
+                    var accountIBbSelect = document.getElementById("accountIBb");
+                    var count = 0;
+                    $.each(jsonData, function (i, val) {
+                        var opt_name = val.BHID + ' ' + val.BHIDName;
+                        var opt_vale = val.BHID;
+                        $('#accountIBb').append($('<option />', { value: opt_vale, text: opt_name }));
+                        count++;
+                    });
+                    if (count > 0) {
+                        accountIBbSelect.options[accountIBbSelect.selectedIndex].text = "請選擇分公司";
+                        $('#accountIBb').focus();
+                    }
+                    LoadCookies();
+                    AutoLogin();
+                }
+            });
+        }
+        /* --- 清除CA的記錄 --- */
+        function ClearCACookie() {
+            delCookie('CAPath');
+            delCookie('CAName');
+            delCookie('CAPassword');
+        }
+        function ChangeLoginMode(CheckName) {
+            var Check = document.getElementById(CheckName);
+            Check.checked = true;
+            if (CheckName == 'accountLogin') { Tab = "AccountTable"; }
+            else { Tab = "IDTable"; }
+            var TabA = document.getElementById("TabA");
+            var IDTable = document.getElementById("IDTable");
+            var AccountTable = document.getElementById("AccountTable");
+            var loginflag = document.getElementById("loginFlag");
+            switch (Tab) {
+                case "AccountTable":
+                    IDTable.style.visibility = 'hidden';
+                    AccountTable.style.visibility = 'visible';
+                    loginflag.value = '1';
+                    break;
+                case "IDTable":
+                    IDTable.style.visibility = 'visible';
+                    AccountTable.style.visibility = 'hidden';
+                    loginflag.value = '2';
+                    break;
+            }
+        }
+        function LoadCookies() {
+            //帳號登入
+            var checkedA = getCookie('RecordA');
+            if ((checkedA == null) | (checkedA == undefined)) { }
+            else {
+                var cval = checkedA.split(",");
+                if (cval.length == 3) {
+                    if (cval[0] == 'true') {
+                        var Checked = cval[0];
+                        var BHNO = $.trim(cval[1]);
+                        var Account = cval[2];
+                        if (Account == undefined) { Account = ''; }
+                        if ((BHNO == '') | (BHNO == undefined) | (BHNO == null)) { }
+                        else {
+                            if ((Account == '') | (Account == undefined) | (Account == null)) { }
+                            else {
+                                ChangeLoginMode('accountLogin');
+                                var accountIBb = document.getElementById('accountIBb');
+                                if (accountIBb == undefined) { }
+                                else {
+                                    for (var i = 0; i < accountIBb.options.length; i++) {
+                                        var SelectedBHNO = $.trim(accountIBb.options[i].value);
+                                        if (SelectedBHNO == BHNO) {
+                                            accountIBb.selectedIndex = i;
+                                            break;
+                                        }
+                                    }
+                                }
+                                $("#accountID").val(Account);
+                                $("#RecordA").prop("checked", true);
+                                $("#accountPassword").focus();
+                            }
+                        }
+                    }
+                }
+            }
+            //身分證登入
+            var checkedB = getCookie('RecordB');
+            if ((checkedB == null) | (checkedB == undefined)) { }
+            else {
+                var cval = checkedB.split(",");
+                if (cval.length == 2) {
+                    if (cval[0] == 'true') {
+                        if ((cval[1] == '') | (cval[1] == undefined) | (cval[1] == null)) { }
+                        else {
+                            ChangeLoginMode('idLogin');
+                            $("#RecordB").prop("checked", true);
+                            $("#txtUserID").val(cval[1]);
+                            $("#queryibs").click();
+                            $("#idPassword").focus();
+                        } 
+                    }
+                }
+            }
+            //登入方式
+            var IDTable = document.getElementById("IDTable");
+            var AccountTable = document.getElementById("AccountTable");
+            var loginflag = document.getElementById("loginFlag");
+            var LoginType = getCookie('LoginType');
+            switch (LoginType) {
+                case 'ACID':
+                    $("#accountLogin").attr("checked", true);
+                    IDTable.style.visibility = 'hidden';
+                    AccountTable.style.visibility = 'visible';
+                    loginflag.value = '1';
+                    break;
+                case 'USID':
+                    $("#idLogin").attr("checked", true);
+                    IDTable.style.visibility = 'visible';
+                    AccountTable.style.visibility = 'hidden';
+                    loginflag.value = '2';
+                    break;
+            }
+        }
+        function chageRecord(thisCheck) {
+            var chk = document.getElementById(thisCheck);
+            chk.checked = chk.checked ? false : true;
+        }
+        function RecordLoginType() {
+            var LoginType = $("[name='Acc']:checked").val();
+            setCookie('LoginType', LoginType);
+        }
+        function RecordCookies(thisCheck) {
+            var chk = document.getElementById(thisCheck);
+            var CookieValue = chk.checked + ',';
+            RecordLoginType();
+            switch (thisCheck) {
+                case 'RecordA':
+                    var accountIBb = document.getElementById('accountIBb');
+                    var BHNO = accountIBb.options[accountIBb.selectedIndex].value;
+                    var accountID = document.getElementById('accountID');
+                    if ((chk.checked == 'true') | (chk.checked == true)) {
+                        CookieValue += BHNO + "," + accountID.value;
+                    } else {
+                        delCookie(thisCheck);
+                    }
+                    break;
+                case 'RecordB':
+                    if ((chk.checked == 'true') | (chk.checked == true)) {
+                        var txtUserID = document.getElementById('txtUserID');
+                        CookieValue += txtUserID.value;
+                    } else {
+                        delCookie(thisCheck);
+                    }
+                    break;
+            }
+            setCookie(thisCheck, CookieValue);
+            return true;
+        }
+        function LoginDoing(State) {
+            if (State) {
+                $("#accountimgSubmit").show();
+                $("#accountimgSubmitLoging").hide();
+                $("#imgSubmit").show();
+                $("#imgSubmitLoging").hide();
+                $("#btnAdd").attr("disabled", false);
+            } else {
+                $("#accountimgSubmit").hide();
+                $("#accountimgSubmitLoging").show();
+                $("#imgSubmit").hide();
+                $("#imgSubmitLoging").show();
+            }
+        }
+        function AutoLogin() {
+            var BHNO = '@BHNO';
+            var ACNO = '@ACNO';
+            var APWD = '@APWD';
+            if ((BHNO == '') | (ACNO == '') | (APWD == '')) { }
+            else {
+                var accountIBb = document.getElementById("accountIBb");
+                if ((accountIBb == undefined) | (accountIBb == null)) { }
+                else {
+                    for (var i = 0; i < accountIBb.options.length; i++) {
+                        var SelectedBHNO = $.trim(accountIBb.options[i].value);
+                        if (SelectedBHNO == BHNO) {
+                            accountIBb.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    $("#accountID").val(ACNO);
+                    $("#accountPassword").val(APWD);
+                    $("#accountimgSubmit").click();
+                }
+            }
+        }
+        jQuery(document).ready(
+            function () {
+                LoginDoing(true);
+                ClearCACookie();
+                $("#accountLabel_ErrorMsg").change(function () {
+                    $("#accountPassword").val("");
+                    $("#accountPasswordOther").val("");
+                });
+                $("#Label_ErrorMsg").change(function () {
+                    $("#idPassword").val("");
+                    $("#idPasswordOther").val("");
+                });
+                $("#hdCAVersion").val(GetCAVertion());
+                $("#accountLogin").click(
+                    function () {
+                        $.ajax({
+                            type: "POST",
+                            data: {},
+                            dataType: "json",
+                            url: '@Url.Content("~/Data/LoadBranchDat")',
+                            success: function (oData) {
+                                $('#accountIBb').empty();
+                                $('#accountIBb').append($('<option value="" selected />', { value: "", text: "請按查詢" }));
+                                var jsonData = $.parseJSON(oData.Content);
+                                var accountIBbSelect = document.getElementById("accountIBb");
+                                var count = 0;
+                                $.each(jsonData, function (i, val) {
+                                    var opt_name = val.BHID + ' ' + val.BHIDName;
+                                    var opt_vale = val.BHID;
+                                    $('#accountIBb').append($('<option />', { value: opt_vale, text: opt_name }));
+                                    count++;
+                                });
+                                if (count > 0) {
+                                    accountIBbSelect.options[accountIBbSelect.selectedIndex].text = "請選擇分公司";
+                                    $('#accountIBb').focus();
+                                }
+                            }
+                        });
+                    }
+                );
+                $("#imgSubmit, #accountimgSubmit").click(
+                    function () {
+                        LoginDoing(false);
+                        var loginFlag = document.getElementById("loginFlag");
+                        switch (loginFlag.value) {
+                            case '1':
+                                var accountIBb = document.getElementById("accountIBb");
+                                var IBb = accountIBb.options[accountIBb.selectedIndex].value;
+                                if (IBb == "") {
+                                    activeSubmit = false;
+                                    $("#accountLabel_ErrorMsg").html("請選擇分公司");
+                                    $("#accountIBb").focus();
+                                    LoginDoing(true);
+                                    return;
+                                }
+                                var accountID = $.trim($("#accountID").val());
+                                if (accountID == "") {
+                                    activeSubmit = false;
+                                    $("#accountLabel_ErrorMsg").html("請輸入帳號");
+                                    $("#accountID").focus();
+                                    LoginDoing(true);
+                                    return;
+                                }
+                                else {
+                                    if (accountID.length <= 7) {
+                                        accountID = PadLeft(accountID, 7, '0');
+                                        $("#accountID").val(accountID);
+                                    }
+                                    else {
+                                        activeSubmit = false;
+                                        $("#accountLabel_ErrorMsg").html("帳號長度錯誤");
+                                        $("#accountID").focus();
+                                        LoginDoing(true);
+                                        return;
+                                    }
+                                }
+                                var accountPassword = $.trim($("#accountPassword").val());
+                                if (accountPassword == "") {
+                                    activeSubmit = false;
+                                    $("#accountLabel_ErrorMsg").html("請輸入密碼");
+                                    $("#accountPassword").focus();
+                                    LoginDoing(true);
+                                    return;
+                                }
+                                RecordCookies('RecordA');
+                                break;
+                            case '2':
+                                var accountIBa = document.getElementById("accountIBa");
+                                var IBa = accountIBa.options[accountIBa.selectedIndex].value;
+                                if (IBa == "") {
+                                    activeSubmit = false;
+                                    $("#Label_ErrorMsg").html("請選擇分公司");
+                                    $("#accountIBa").focus();
+                                    LoginDoing(true);
+                                    return;
+                                }
+                                var userID = $.trim($("#txtUserID").val());
+                                if (userID == "") {
+                                    activeSubmit = false;
+                                    $("#Label_ErrorMsg").html("請輸入身分證字號");
+                                    $("#txtUserID").focus();
+                                    LoginDoing(true);
+                                    return;
+                                }
+                                var password = $.trim($("#idPassword").val());
+                                if (password == "") {
+                                    activeSubmit = false;
+                                    $("#Label_ErrorMsg").html("請輸入密碼");
+                                    $("#idPassword").focus();
+                                    LoginDoing(true);
+                                    return;
+                                }
+                                RecordCookies('RecordB');
+                                break;
+                        }
+                        $("form").submit();
+                    }
+                );
+                //載入COOKIE必須在("#imgSubmit, #accountimgSubmit")之後執行,否則會帶入Cookie的資料發生錯誤
+                LoadBranchDat();
+                var queryibsBusy = false;
+                $("#queryibs").click(
+                    function () {
+                        if (queryibsBusy) return;
+                        queryibsBusy = true;
+                        $("#queryibs").attr("disabled", true);
+                        var userID = $.trim($("#txtUserID").val());
+                        if (userID == "") {
+                            $("#Label_ErrorMsg").html("請輸入身分證字號");
+                            queryibsBusy = false;
+                            $("#queryibs").attr("disabled", false);
+                            return;
+                        }
+                        $.ajax({
+                            type: "POST",
+                            data: { idno: userID },
+                            dataType: "json",
+                            url: '@Url.Content("~/Data/EESSOACNO")',
+                            success: function (oData) {
+                                $('#accountIBa').empty();
+                                $('#accountIBa').append($('<option />', { value: "", text: "請按查詢" }));
+                                var jsonData = $.parseJSON(oData.Content);
+                                var accountIBaSelect = document.getElementById("accountIBa");
+                                var count = 0;
+                                $.each(jsonData, function (i, val) {
+                                    var opt_name = val.sBhnoName;
+                                    var opt_vale = val.sAcno + '|' + val.sBhno;
+                                    $('#accountIBa').append($('<option />', { value: opt_vale, text: opt_name }));
+                                    count++;
+                                });
+                                if (count > 0) {
+                                    accountIBaSelect.options[accountIBaSelect.selectedIndex].text = "請按查詢";
+                                    if (accountIBaSelect.options.length == 2)
+                                    { accountIBaSelect.selectedIndex = 1; }
+                                    var txtPassword = document.getElementById("txtPassword");
+                                    $("#txtPassword").attr('disabled', '');
+                                    $("#txtPassword").focus();
+                                } else {
+                                    $("#Label_ErrorMsg").html("查無該身分證字號的分公司代碼");
+                                }
+                            }
+                        });
+                        queryibsBusy = false;
+                        $("#queryibs").attr("disabled", false);
+                    }
+                );
+                $("#txtUserID, #txtPassword, #accountID, #accountPassword, #idPassword").keyup(
+                    function (event) {
+                        if (event.keyCode == 13) {
+                            var MyId = $(this).attr("id");
+                            switch (MyId) {
+                                case "accountPassword":
+                                    $("#accountimgSubmit").click();
+                                    break;
+                                case "idPassword":
+                                    $("#imgSubmit").click();
+                                    break;
+                            }
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+</head>
+<body>
+    <table border="0" align="center" bgcolor="#FFFFFF">
+        <tr>
+            <td width="320" valign="top">
+                <table width="100%" border="0" align="left" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td height="28">
+                            <img src="@Url.Content("~/images/title_login.jpg")" alt="..." />
+                            <font color="white">@HostInfo</font> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:332px">
+                            <table style="width:100%">
+                                <tr>
+                                    <td id="TabA" align="right" >  
+                                        <input type="radio" value="ACID" id="accountLogin" checked="checked" name="Acc" style="cursor:pointer" onclick="ChangeLoginMode('accountLogin');" />
+                                            <span style="cursor:pointer" onclick="ChangeLoginMode('accountLogin');">帳號登入</span> 
+                                        <input type="radio" value="USID" id="idLogin" name="Acc" style="cursor:pointer" onclick="ChangeLoginMode('idLogin');" />
+                                            <span style="cursor:pointer" onclick="ChangeLoginMode('idLogin');">身分證登入</span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <form name="form1" method="post" action="">
+                                <input type="hidden" id="loginFlag" name="loginFlag" value="1" />
+                                <input type="hidden" id="hdCAVersion" name="hdCAVersion" value="" />
+                                <!---------------------------------- 以帳號登入的頁面 ----------------------------------------->
+                                <div id="AccountTable" style="overflow:hidden; visibility:visible; position:absolute; width:332px; top:140px; z-index:2">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td>
+                                                <img src="@Url.Content("~/images/loginLbg.png")" width="14" height="332" alt="..." />
+                                            </td>
+                                            <td valign="top" background="@Url.Content("~/images/loginCbg.png")" height="332">
+                                                <br />
+                                                <table width="98%" border="0" align="center" cellpadding="2" cellspacing="0" class="tb3">
+                                                    <tr>
+                                                        <td width="32%" valign="middle" style="height:36px">
+                                                            <img src="@Url.Content("~/images/ib.png")" alt="..." />
+                                                        </td>
+                                                        <td width="68%" valign="middle" align="left">
+                                                            <table style="width:100%">
+                                                                <tr>
+                                                                    <td align="left">
+                                                                        <select type="text" id="accountIBb" name="accountIBb" class="bord" size="1" runat="server"
+                                                                            maxlength="12" autocomplete="off" style="width:184px">
+                                                                            <option value="">請按查詢</option>
+                                                                        </select>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="32%" valign="middle" style="height:32px">
+                                                            <img src="@Url.Content("~/images/Account.png")" alt="..." />
+                                                        </td>
+                                                        <td width="68%" valign="middle" style="padding-left:2px">
+                                                            <input type="text" id="accountID" name="accountID" value="" class="bord" size="12"
+                                                            maxlength="12" style="width:180px" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="32%" valign="bottom" style="height:32px">
+                                                            <img src="@Url.Content("~/images/pwd.png")" alt="..." />
+                                                        </td>
+                                                        <td valign="top">
+                                                            <table width="100%">
+                                                                <tr>
+                                                                    <td width="60%">
+                                                                        <input type="password" id="accountPassword" name="accountPassword" value="" class="bord" size="12" maxlength="10" style="width:104px" 
+                                                                            onblur="doClearStatusLabel('accountLabel_ErrorMsg');"
+                                                                            onkeypress="detectCapsLock('accountLabel_ErrorMsg');"
+                                                                            onkeyup="ValueDump(this, 'accountPasswordOther');"
+                                                                            AutoComplete="off" />
+                                                                        <input type="text" id="accountPasswordOther" name="accountPasswordOther" value="" class="bord" size="12" maxlength="10" style="width:104px; display:none" />   
+                                                                    </td>
+                                                                    <td width="40%">
+                                                                        <img border="0" id="AccountAPwdImg" src="@Url.Content("~/Images/Eyes.gif")" width="24" height="14" style="cursor:pointer"  alt="..."
+                                                                            onclick="return false;" 
+                                                                            onmousedown="changePasswordState('#AccountAPwdImg', '#accountPassword', '#accountPasswordOther', false);"
+                                                                            onmouseup="changePasswordState('#AccountAPwdImg', '#accountPassword', '#accountPasswordOther', true);"
+                                                                            onmouseout="changePasswordState('#AccountAPwdImg', '#accountPassword', '#accountPasswordOther', true);" />
+                                                                        <img 
+                                                                            src="@Url.Content("~/images/login.png")" 
+                                                                            id="accountimgSubmit" 
+                                                                            style="cursor:pointer"
+                                                                            alt="..."
+                                                                        />
+                                                                        <img 
+                                                                            src="@Url.Content("~/images/loging.png")" 
+                                                                            id="accountimgSubmitLoging" 
+                                                                            style="cursor:wait; display:none"
+                                                                            alt="..."
+                                                                        />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2" valign="middle" style="height:24px">
+                                                            <div align="center" class="redfont">
+                                                                <div id="accountLabel_ErrorMsg" style="width:300px; height:36px; text-align:center; overflow:auto">
+                                                                @(msg)
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2" style="padding-left:12px">
+                                                            <table style="width:100%">
+                                                                <tr>
+                                                                    <td align="left">
+                                                                        <input type="checkbox" id="RecordA" name="RecordA" value="ON" style="cursor:pointer" />
+                                                                        <span  class="tb2" style="cursor:pointer" onclick="chageRecord('RecordA');">
+                                                                            記住分公司別與帳號
+                                                                        </span> 
+                                                                    </td>
+                                                                    <td align="right">
+                                                                        <a href="http://www.esunsec.com.tw/cus_service/forgot_password.html" target="_blank">
+                                                                            <span class="tb2">忘記密碼</span>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <img src="@Url.Content("~/images/ling.gif")" width="100%" height="5" align="baseline" alt="..." />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb2">
+                                                                <tr>
+                                                                    <td colspan="2">
+                                                                        <br />登入說明：<br /><br />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td width="4%" valign="top">1.
+                                                                    </td>
+                                                                    <td width="96%">網路登入密碼為6~10位英數字，英文字會區分大小寫。
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td valign="top">2.
+                                                                    </td>
+                                                                    <td>首次登入客戶，請先修改網路登入密碼及申請電腦憑證，才可以進行下單交易。
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td valign="top">
+                                                                    </td>
+                                                                    <td>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>                                            
+                                            </td>
+                                            <td width="17">
+                                                <img src="@Url.Content("~/images/loginRbg.png")" width="13" height="332" alt="..." />
+                                            </td>
+                                        </tr>
+                                    </table>                                               
+                                </div>
+                                <!---------------------------------- 以身分證號登入的頁面 ----------------------------------------->
+                                <div id="IDTable" style="overflow:hidden; position:absolute; width:332px; top:140px; visibility:hidden; z-index:2">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td>
+                                                <img src="@Url.Content("~/images/loginLbg.png")" width="14" height="332" alt="..." />
+                                            </td>
+                                            <td valign="top" height="332" style="background-image:url(@Url.Content("/Images/loginCbg.png"))" >
+                                                <br />
+                                                <table width="98%" border="0" align="center" cellpadding="2" cellspacing="0" class="tb3">
+                                                    <tr>
+                                                        <td width="32%" valign="middle" style="height:32px">
+                                                            <img src="@Url.Content("~/images/id.png")" alt="..." />
+                                                        </td>
+                                                        <td width="48%" valign="middle" >
+                                                            <table width="100%">
+                                                                <tr>
+                                                                    <td width="73%">
+                                                                        <input type="text" id="txtUserID" name="txtUserID" value="" class="bord" size="12"
+                                                                            maxlength="12" style="width:132px;text-transform: uppercase" />
+                                                                    </td>
+                                                                    <td align="left" valign="top">
+                                                                        <img id="queryibs" src="@Url.Content("~/images/queryib.png")"
+                                                                            style="padding-top:4px; cursor:pointer; height:20px; width:40px" alt="..." />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="32%" valign="middle" style="height:36px">
+                                                            <img src="@Url.Content("~/images/ib.png")" alt="..." />
+                                                        </td>
+                                                        <td width="68%" valign="middle" align="left">
+                                                            <table style="width:100%">
+                                                                <tr>
+                                                                    <td align="left">
+                                                                        <select type="text" id="accountIBa" name="accountIBa" class="bord" size="1" runat="server"
+                                                                            maxlength="12" autocomplete="off" style="width:184px">
+                                                                            <option value="">請按查詢</option>
+                                                                        </select>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="32%" valign="bottom" style="height:32px">
+                                                            <img src="@Url.Content("~/images/pwd.png")" alt="..." />
+                                                        </td>
+                                                        <td valign="top">
+                                                            <table width="100%">
+                                                                <tr>
+                                                                    <td width="60%">
+                                                                        <input type="password" id="idPassword" name="idPassword" value="" class="bord" size="8" maxlength="10" style="width:104px"
+                                                                            onblur="doClearStatusLabel('Label_ErrorMsg');"
+                                                                            onkeypress="detectCapsLock('Label_ErrorMsg');"
+                                                                            onkeyup="ValueDump(this, 'idPasswordOther');" 
+                                                                            AutoComplete="off" />
+                                                                        <input type="text" id="idPasswordOther" name="idPasswordOther" value="" class="bord" size="8" maxlength="10" style="width:104px; display:none" />   
+                                                                    </td>
+                                                                    <td width="40%">
+                                                                        <img border="0" id="APwdImg" src="@Url.Content("~/Images/Eyes.gif")" width="24" height="14" style="cursor:pointer" alt="..."
+                                                                            onclick="return false;"
+                                                                            onmousedown="changePasswordState('#APwdImg', '#idPassword', '#idPasswordOther', false);"
+                                                                            onmouseup="changePasswordState('#APwdImg', '#idPassword', '#idPasswordOther', true);"
+                                                                            onmouseout="changePasswordState('#APwdImg', '#idPassword', '#idPasswordOther', true);" />
+                                                                        <img 
+                                                                            src="@Url.Content("~/images/login.png")" 
+                                                                            id="imgSubmit" 
+                                                                            style="cursor:pointer"
+                                                                            alt="..."
+                                                                        />
+                                                                        <img 
+                                                                            src="@Url.Content("~/images/loging.png")" 
+                                                                            id="imgSubmitLoging" 
+                                                                            style="cursor:wait; display:none"
+                                                                            alt="..."
+                                                                        />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2" valign="middle" style="height:24px">
+                                                            <div align="center" class="redfont">
+                                                                <div id="Label_ErrorMsg" style="width:300px; height:36px; text-align:center; overflow:auto">
+                                                                @(msg)  
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2" style="padding-left:12px">
+                                                            <table style="width:100%">
+                                                                <tr>
+                                                                    <td align="left">
+                                                                        <input type="checkbox" id="RecordB" name="RecordB" value="ON" style="cursor:pointer" />
+                                                                        <span  class="tb2" style="cursor:pointer" onclick="chageRecord('RecordB');">記住身分證號</span> 
+                                                                    </td>
+                                                                    <td align="right">
+                                                                        <a href="http://www.esunsec.com.tw/cus_service/forgot_password.html" target="_blank">
+                                                                            <span class="tb2">忘記密碼</span>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <img src="@Url.Content("~/images/ling.gif")" width="100%" height="5" align="baseline" alt="..." />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb2">
+                                                                <tr>
+                                                                    <td colspan="2">
+                                                                        <br />登入說明：<br /><br />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td width="4%" valign="top">1.
+                                                                    </td>
+                                                                    <td width="96%">網路登入密碼為6~10位英數字，英文字會區分大小寫。
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td valign="top">2.
+                                                                    </td>
+                                                                    <td>首次登入客戶，請先修改網路登入密碼及申請電腦憑證，才可以進行下單交易。
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td valign="top">
+                                                                    </td>
+                                                                    <td>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td width="17">
+                                                <img src="@Url.Content("~/images/loginRbg.png")" width="13" height="332" alt="..." />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td width="670" valign="top">
+                <div style="overflow:hidden; position:absolute; margin-left:8px; width:678px; top:145px; z-index:2">
+                    <img src="../../Images/Banner.png" alt=""  style="height:184px; width:670px; border:1px solid #e0e0e0;"/>
+                    <iframe src="@EagleEyes.Common.Util.ProclamationUrl" style="width: 670px; height: 136px; overflow:hidden;
+                        border:1px solid #e0e0e0; z-index:2" 
+                        frameborder="0">
+                    </iframe>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div id="divCover" style="margin: 0px; background: #009A92; z-index: 999; display: none; filter: alpha(opacity = 80); opacity: 0.8;">
+    </div>
+    <div id="divTest">
+    </div>
+    </body>
+</html>

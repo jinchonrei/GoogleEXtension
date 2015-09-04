@@ -1,0 +1,25 @@
+﻿@using EagleEyes.Common
+@{
+
+}    
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>玉山雲端秘書</title>
+        <script src="@Url.Content("~/Scripts/StringBuilder.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery-1.8.0.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery-ui-1.8.11.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/Plugin_ScreenCover.js")" type="text/javascript" ></script>
+        <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/String.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/Common.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/json2.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/CA.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/BrowserDetection.js")" type="text/javascript"></script>
+    </head>
+    @RenderSection("Style", false)
+    @RenderSection("Script", false)
+    @RenderBody()
+    <body>
+    </body>
+</html>

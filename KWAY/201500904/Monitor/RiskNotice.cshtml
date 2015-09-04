@@ -1,0 +1,187 @@
+﻿@using EagleEyes.Common
+@{
+    ViewBag.Title = "RiskNotice";
+    Layout = "~/Views/Shared/_RiskNotice.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>玉山雲端秘書-風險預告書</title>
+    <link  href='@Url.Content("~/Content/Site.css")' rel="stylesheet" type="text/css" />
+    <link  href='@Url.Content("~/Content/themes/base/jquery.ui.all.css")' rel="stylesheet" type="text/css" />
+    <script src='@Url.Content("~/Scripts/StringBuilder.js")' type="text/javascript"></script>
+    <script src='@Url.Content("~/Scripts/jquery-1.8.0.js")' type="text/javascript"></script>
+    <script src='@Url.Content("~/Scripts/jquery-ui-1.8.11.min.js")' type="text/javascript"></script>
+    <script src='@Url.Content("~/Scripts/Plugin_ScreenCover.js")' type="text/javascript" ></script>
+    <script src='@Url.Content("~/Scripts/modernizr-1.7.min.js")' type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/String.js")" type="text/javascript"></script>
+    <script src='@Url.Content("~/Scripts/Common.js")' type="text/javascript"></script>
+    <script src='@Url.Content("~/Scripts/json2.js")' type="text/javascript"></script>
+    <script src='@Url.Content("~/Scripts/CA.js")' type="text/javascript"></script>
+    <script src='@Url.Content("~/Scripts/BrowserDetection.js")' type="text/javascript"></script>
+    <link rel="stylesheet" media="all" type="text/css" href="@Url.Content("~/css/dropdown.css")" />
+</head>
+<body>
+<form id="form1" runat="server">
+    <p align="center"></p>
+        <div>
+            <table align="center" style="border:3px double #f0f0f0; width:800px">
+                <tr>
+                    <td align="center" colspan="2">
+                        <img src='@Url.Content("~/Images/RiskHead.png")' alt="" title="雲端秘書風險預告書暨使用同意書" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+                        雲端秘書風險預告書暨使用同意書
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2" style="height:8px">
+                    </td>
+                </tr>
+                <!-- 立書人於委託交易時，利用  貴公司所提供雲端秘書功能，預先設定條件（價量/限時），待觸發條件後始自動執行通知或委託買賣之交易方式（以下簡稱本服務），立書人充分瞭解並同意下列條款進行雲端秘書服務。 -->
+                <tr>
+                    <td align="right" style="width:60px" valign="top">
+                    </td>
+                    <td align="left">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    立書人於委託交易時，利用  貴公司所提供雲端秘書功能，預先設定條件（價量/限時），待觸發條件後始自動執行通知或委託買賣之交易方式（以下簡稱本服務），立書人充分瞭解並同意下列條款進行雲端秘書服務。
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2" style="height:8px">
+                    </td>
+                </tr>
+                <!-- 一、立書人應妥善保管使用個人帳號、自訂密碼、及電子憑證，電子委託單買賣經貴公司核對密碼與電子憑證無誤，即視為本人親自委託；立書人之密碼與電子憑證，若有遺失、被竊或洩漏時，應立即通知 貴公司進行註銷及重新設定密碼與電子憑證，未通知 貴公司前，以其密碼與電子憑證進行之交易，無論立書人是否知情，概由立書人自行負結算交割義務。 -->
+                <tr>
+                    <td align="right" style="width:60px" valign="top">
+                        一、
+                    </td>
+                    <td align="left" valign="top">
+                        立書人應妥善保管使用個人帳號、自訂密碼、及電子憑證，電子委託單買賣經貴公司核對密碼與電子憑證無誤，即視為本人親自委託；立書人之密碼與電子憑證，若有遺失、被竊或洩漏時，應立即通知 貴公司進行註銷及重新設定密碼與電子憑證，未通知 貴公司前，以其密碼與電子憑證進行之交易，無論立書人是否知情，概由立書人自行負結算交割義務。
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2" style="height:8px">
+                    </td>
+                </tr>
+                <!-- 二、本服務為網際網路之傳輸通訊，如發生天然災害等不可抗力(包括但不限於斷線、斷電、網路壅塞或其它不可歸責於 貴公司之因素等情況)，導致資料錯誤、遺漏、傳輸延遲、停滯、無法發出或無法接收之情事，而直接或間接產生之任何損失或損害， 貴公司皆不負任何責任。立書人於使用本服務前，應對 貴公司不定時發佈之最新訊息及其他注意事項等應詳加注意及遵守。立書人使用本服務時，應隨時注意系統資訊的正常運作，如發現異常，請立即向所屬營業員反應。 -->
+                <tr>
+                    <td align="right" style="width:60px" valign="top">
+                       二、
+                    </td>
+                    <td align="left" valign="top">
+                        本服務為網際網路之傳輸通訊，如發生天然災害等不可抗力(包括但不限於斷線、斷電、網路壅塞或其它不可歸責於 貴公司之因素等情況)，導致資料錯誤、遺漏、傳輸延遲、停滯、無法發出或無法接收之情事，而直接或間接產生之任何損失或損害， 貴公司皆不負任何責任。立書人於使用本服務前，應對 貴公司不定時發佈之最新訊息及其他注意事項等應詳加注意及遵守。立書人使用本服務時，應隨時注意系統資訊的正常運作，如發現異常，請立即向所屬營業員反應。
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2" style="height:8px">
+                    </td>
+                </tr>
+                <!-- 三、立書人使用本服務時，建議在穩定、快速的連線環境，不建議使用無線網路、3G或3.5G網卡。如因連線品質不穩或同時開啟太多報價軟體等情況，導致立書人使用本服務進行設定監控條件存入系統發生延遲時，則會造成無法正確通知與委託買賣狀況發生。 -->
+                <tr>
+                    <td align="right" style="width:60px" valign="top">
+                        三、
+                    </td>
+                    <td align="left" valign="top">
+                        立書人使用本服務時，建議在穩定、快速的連線環境，不建議使用無線網路、3G或3.5G網卡。如因連線品質不穩或同時開啟太多報價軟體等情況，導致立書人使用本服務進行設定監控條件存入系統發生延遲時，則會造成無法正確通知與委託買賣狀況發生。
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2" style="height:8px">
+                    </td>
+                </tr>
+                <!-- 四、立書人使用本服務預先設定下單條件，一旦到達觸發價格且點選觸發後直接下單功能時，即轉為市價委託或限價委託，其成交價格可能高於、低於或等於觸發價，本服務電子下單系統中之委託、成交查詢及相關資料僅供參考，立書人一切成交之股票、期權部位及財務皆以交易所回報及實際數字為準，且於成交後交易人應依證券交易法、期貨交易法及相關規定履行各項結算交割義務。 -->
+                <tr>
+                    <td align="right" style="width:60px" valign="top">
+                        四、
+                    </td>
+                    <td align="left" valign="top">
+                        立書人使用本服務預先設定下單條件，一旦到達觸發價格且點選觸發後直接下單功能時，即轉為市價委託或限價委託，其成交價格可能高於、低於或等於觸發價，本服務電子下單系統中之委託、成交查詢及相關資料僅供參考，立書人一切成交之股票、期權部位及財務皆以交易所回報及實際數字為準，且於成交後交易人應依證券交易法、期貨交易法及相關規定履行各項結算交割義務。
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2" style="height:8px">
+                    </td>
+                </tr>
+                <!-- 五、流動性不足或成交量過小之商品使用本服務下單時，可能造成較大價格偏離。 -->
+                <tr>
+                    <td align="right" style="width:60px" valign="top">
+                        五、
+                    </td>
+                    <td align="left" valign="top">
+                        流動性不足或成交量過小之商品使用本服務下單時，可能造成較大價格偏離。
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2" style="height:8px">
+                    </td>
+                </tr>
+                <!-- 六、立書人使用本服務進行長效條件監控設定時，如委託下單之股票由興櫃轉上市櫃、停止交易或其他交易所公告變更交易方式、憑證變動等，則可能導致委託下單失敗，立書人應自行隨時留意個股動態，並使用有效期限大於監控期限之有效憑證方可使用本服務進行長效條件監控。 -->
+                <tr>
+                    <td align="right" style="width:60px" valign="top">
+                        六、
+                    </td>
+                    <td align="left" valign="top">
+                        立書人使用本服務進行長效條件監控設定時，如委託下單之股票由興櫃轉上市櫃、停止交易或其他交易所公告變更交易方式、憑證變動等，則可能導致委託下單失敗，立書人應自行隨時留意個股動態，並使用有效期限大於監控期限之有效憑證方可使用本服務進行長效條件監控。
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2" style="height:8px">
+                    </td>
+                </tr>
+                <!-- 七、貴公司有權為符合公司風險管理之目的，適度調整期貨保證金、選擇權保證金之額度，或取消立書人已委託之各項委託單予以暫停買賣，立書人並無異議。 -->
+                <tr>
+                    <td align="right" style="width:60px" valign="top">
+                        七、
+                    </td>
+                    <td align="left" valign="top">
+                        貴公司有權為符合公司風險管理之目的，適度調整期貨保證金、選擇權保證金之額度，或取消立書人已委託之各項委託單予以暫停買賣，立書人並無異議。
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2" style="height:8px">
+                    </td>
+                </tr>
+                <!-- 八、貴公司保留得隨時調整、修正、暫停或終止本服務之權利。 -->
+                <tr>
+                    <td align="right" style="width:60px" valign="top">
+                        八、
+                    </td>
+                    <td align="left" valign="top">
+                        貴公司保留得隨時調整、修正、暫停或終止本服務之權利。
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2" style="height:8px">
+                    </td>
+                </tr>
+                <!-- 九、本風險預告書暨同意書係立書人與玉山簽訂之特別約定，如有未規定之事項，悉依受託契約、雙方其它協議及相關法令規定辦理。 -->
+                <tr>
+                    <td align="right" valign="top" style="width:60px">
+                        九、
+                    </td>
+                    <td align="left" valign="top">
+                        本風險預告書暨同意書係立書人與玉山簽訂之特別約定，如有未規定之事項，悉依受託契約、雙方其它協議及相關法令規定辦理。
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" style="width:60px" valign="top">
+                    </td>
+                    <td align="center" style="padding-right:60px">
+                         此致<br />
+                         玉山綜合證券股份有限公司
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+                        <img src='@Url.Content("~/Images/SignRisk.png")' id="SignBtn" alt="" style="cursor:pointer" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+    <applet id="esunca" name="esunca" code="com.twca.ESSecuritiesApplet.class" archive="/CA/ESSecuritiesApplet.jar" width="0" height="0"></applet>
+</body>
+</html>

@@ -1,0 +1,206 @@
+﻿@using EagleEyes.Common
+@using EagleEyes.Properties
+@{
+    /* --- 系統維運中 --- */
+    string userID = string.Empty;
+    bool isLogin = Util.IsLogin(ref userID);
+    //Util.AddCookie(CookieKeys.Sign, "Y");                       //暫時FOR DEBUG
+    //Util.AddCookie(CookieKeys.EagleEyes_UserID, "Y120447027");  //暫時FOR DEBUG
+    string caVersion = Util.GetCookieValue("CAVersion");
+    string A1 = this.Request["A1"];
+    string A2 = this.Request["A2"];
+    if (Settings.Default.IsMaintenance >= 1)
+    { this.Response.Redirect("~/Mobile/Maintenance?A1=" + A1 + "&A2=" + A2); }
+    //Util.AddCookie(CookieKeys.Sign, "Y");                       //暫時FOR DEBUG
+    //Util.AddCookie(CookieKeys.EagleEyes_UserID, "Y120447027");  //暫時FOR DEBUG
+}
+<!DOCTYPE html>
+<html>
+<head>    
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <!-- <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, user-scalable=no" /> -->
+    <meta http-equiv="Expires" content="-1" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="Pragma-directive" content="no-cache" />
+    <meta http-equiv="Cache-Directive" content="no-cache" />    
+    <link href="@Url.Content("~/Content/jquery.mobile-1.3.2.min.css")" rel="stylesheet" type="text/css" />
+    <!--- <link href="@Url.Content("~/Content/jquery.mobile-1.4.5.min.css")" rel="stylesheet" type="text/css" /> --->
+    <style>
+        .ui-body-c, .ui-overlay-c
+        { background: #fff; }
+        .ui-input-text
+        { background: #EEEEEE; }
+        .BTitleMOB
+        {
+            background: #A8003F;
+            color: #fff;
+            text-shadow: none;
+            font-size:small;
+            font-weight: bold;
+        }
+        .BContentMOB
+        {
+            background: #fff;
+            color: #000;
+            text-shadow: none;
+            font-size:small;
+        }
+        .BTitle
+        {
+            background: #A8003F;
+            color: #fff;
+            text-shadow: none;
+            font-size: medium;
+            font-weight: bold;
+        }
+        .DefaultText
+        {
+            color: #000;
+            text-shadow: none;
+            font-size:medium;
+        }
+    </style>
+    @RenderSection("Style", false)    
+    <script src="@Url.Content("~/Scripts/StringBuilder.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-1.8.0.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.mobile-1.3.1.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Plugin_ScreenCover.js")" type="text/javascript" ></script>
+    <script src="@Url.Content("~/Scripts/String.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Common.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/mitakelib.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/json2.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/CA.js")" type="text/javascript"></script>
+    @RenderSection("Script", false)
+    <script type="text/javascript">        
+        var clientIP = "";
+        $.getJSON("http://jsonip.appspot.com?callback=?",
+            function (data) {
+                clientIP = data.ip;
+            });
+            $(document).ready(function () { });
+            var agreenmentOrgnData = "";
+            //透過手機提供的服務取回密文
+            function DoAgreenment() {
+                var SignRickIFrame = document.getElementById('SignRickIFrame');
+                if (SignRickIFrame == undefined) {
+                    alert('簽署簽章錯誤、請洽詢本公司客戶服務。');
+                } else {                
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        url: '@Url.Content("~/Data/GetAgreementInfo")',
+                        success: function (oData) {
+                            agreenmentOrgnData = "@userID,8,R," + clientIP;
+                            var Sign = "esun://mode=sign;id=@userID;singtype=P1;order=" + agreenmentOrgnData + ";callback=AgreenmentCallback";
+                            //window.location.href = url;
+                        }
+                    });
+                }
+            }
+            /* --- 開始簽署風險預告同意書 --- */
+            function AgreenmentCallback(id, errorCode, signedOrderData, sn) {
+                if (errorCode == "0") {
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        data: {
+                            EKEYDATA: agreenmentOrgnData,   //原始資料 明文最長為512bytes
+                            EKEYSDATA: signedOrderData,     //驗章資料
+                            idno: id,                       //身分證字號
+                            EKEYCASERIAL: sn                //憑證序號 憑證序號(長度0-255)
+                        },
+                        url: '@Url.Content("~/Data/SignAgreement")',
+                        success: function (oData) {
+                            var obj = $.parseJSON(oData);
+                            var Successed = obj['Success'];
+                            var Msg = obj['Msg'];
+                            if (Successed) {
+                                if (LayoutGetUserNotify()) { }
+                                else {
+                                    alert(Msg);
+                                    window.location.href = '@Url.Content("~/Mobile/Index")';
+                                }
+                            } else {
+                                alert(Msg);
+                            }
+                        }
+                    });
+                } else {
+                    alert("簽章失敗[" + errorCode + "]");
+                }
+                $("#btnAdd").removeClass("ui-disabled");
+            }
+            function showAgreenment() {
+                $.mobile.changePage("#divAgreenment", { transition: "slide" });
+            }
+            /* --- 取回通知管道設定 --- */
+            var LayoutUserNotifyCount = 0;
+            function LayoutGetUserNotify() {
+                var Result = true;
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: '@Url.Content("~/Data/GetUserNotify")',
+                    success: function (jData) {
+                        try {
+                            var jsonResult = $.parseJSON(jData);
+                            if ((jsonResult == null) | (jsonResult == undefined)) { }
+                            else {
+                                if (jsonResult.Success) {
+                                    var items = $.parseJSON(jsonResult.Content);
+                                    for (var ii = 0; ii < items.length; ii++) {
+                                        if (items[ii].IsValid == "1") {
+                                            LayoutUserNotifyCount++;
+                                        }
+                                    }
+                                    if (LayoutUserNotifyCount == 0) {
+                                        Result = false;
+                                        alert('尚未設定通知管道。');
+                                        window.location.href = '@Url.Content("~/Mobile/NotifySetting")';
+                                    }
+                                } else {
+                                    alert(jsonResult.Msg);
+                                }
+                            }
+                        } catch (e) {
+                            HandleError(e);
+                        }
+                    },
+                    error: function (obj) {
+                        HandleAjaxError(obj);
+                    }
+                });
+                return Result;
+            }
+        }
+    </script>
+</head>
+<body>
+    <input type="hidden" runat="server" id="ClientIP" name="ClientIP" value="" />
+    @RenderBody()
+    <div id="divCover" style="
+        margin: 0px; 
+        background:black;         
+        z-index: 999; 
+        display: none;
+        filter: alpha(opacity = 60); 
+        opacity: 0.6;
+        width:100%; 
+        height:100%;
+        position:fixed">
+        <table width="100%">
+            <tr>
+                <td align="center" valign="middle">
+                    <img src="@Url.Content("~/Images/loading_home.gif")" alt="" width="300" height="300" />
+                </td>
+            </tr>
+        </table>        
+    </div>
+    <div style="display:none">
+        <iframe id="SignRickIFrame" src="about:blank" width="100%" height="1" >
+        </iframe>
+    </div>
+</body>
+</html>
