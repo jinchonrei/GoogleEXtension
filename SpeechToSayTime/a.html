@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8">
+
+
+
+
+<script>
+function myFunction() {
+playAudio('audio1', 'zh', document.getElementById('text').value);
+    alert('Hello');
+}
+ function playAudio(id, lang, text) {
+    var audio = document.getElementById(id);
+    audio.src = "http://translate.google.com/translate_tts?ie=utf-8&tl="+lang+"&q="+text;
+    //audio.addEventListener('ended', function(){ this.currentTime = 0; }, false);
+    audio.play();
+  }
+  
+  function startTime() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+    document.getElementById('txt').innerHTML =
+    h + ":" + m + ":" + s;
+	if(m % 15 == 0 && s == "00")
+		//playAudio('audio1', 'zh', document.getElementById('text').value);
+		playAudio('audio1', 'zh', m);
+    var t = setTimeout(startTime, 1000);
+}
+function checkTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+</script>
+</head><body onload="startTime()">
+
+<p>Click "Try it". Wait 3 seconds, and the page will alert "Hello".</p>
+<div id="txt"></div>
+<button onclick="setTimeout(myFunction, 3000);">Try it</button>
+ <audio id="audio1"></audio> 
+  <textarea id="text" rows=10 cols=60>
+  什麼東西
+  </textarea><BR/>
+
+</body>
+</html>

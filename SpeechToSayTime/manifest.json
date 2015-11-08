@@ -1,0 +1,19 @@
+{
+   "background": {
+      "scripts": [ "bg.js" ]
+   },
+   "browser_action": {
+      "default_icon": "icon_19.png",
+      "default_title": "xxx"
+   },
+   "homepage_url": "http://enjoy.your-clock.com/?s=ext_page_link",
+   "icons": {
+      "128": "icon_128.png",
+      "16": "icon_16.png"
+   },
+	"manifest_version": 2,
+   "name": "XXX",
+   "permissions": [ "contextMenus", "notifications", "idle", "chrome://favicon/", "http://enjoy.your-clock.com/*" ],
+   "version": "1.16",
+   "web_accessible_resources": [ "a.html","icon_19.png", "icon_16.png","icon_128.png", "toolbar_icons/1_1.png", "toolbar_icons/1_2.png", "toolbar_icons/1_3.png", "toolbar_icons/1_4.png", "toolbar_icons/1_5.png", "toolbar_icons/1_6.png", "toolbar_icons/1_7.png", "toolbar_icons/1_8.png", "toolbar_icons/1_9.png", "toolbar_icons/1_10.png", "toolbar_icons/1_11.png", "toolbar_icons/2_1.png", "toolbar_icons/2_2.png", "toolbar_icons/2_3.png", "toolbar_icons/2_4.png", "toolbar_icons/2_5.png", "toolbar_icons/2_6.png", "toolbar_icons/2_7.png", "toolbar_icons/2_8.png", "toolbar_icons/2_9.png", "toolbar_icons/2_10.png", "toolbar_icons/2_11.png" ]
+}
